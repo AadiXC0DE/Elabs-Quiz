@@ -1,11 +1,23 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../public/logo.svg";
+import { motion } from "framer-motion";
+
+const variants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="bg-white rounded-lg p-10 shadow-lg max-w-xl px-48">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={variants}
+        className="bg-white rounded-lg p-10 shadow-lg max-w-xl px-48"
+      >
         <div className="flex flex-col items-center justify-center mb-5">
           <Image src={logo} width={196} height={196} className="mb-2"></Image>
           <div className="flex items-center">
@@ -19,11 +31,11 @@ export default function HomePage() {
           Are you ready?
         </p>
         <Link legacyBehavior href="/quiz">
-          <a className="block w-full bg-yellow-500 hover:bg-yellow-600 transition-colors duration-300 rounded-md py-3 text-center text-white font-bold transform hover:scale-105">
+          <a className="block w-full bg-yellow-500 hover:bg-yellow-600 transition-colors duration-300 rounded-md py-3 text-center text-white font-bold">
             Start Quiz
           </a>
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }
