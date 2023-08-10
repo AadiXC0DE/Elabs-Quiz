@@ -45,20 +45,20 @@ const getQna = async(req, res) => {
 	const qnId = await quiz.find({});
 	var rndm = Math.floor(Math.random() * qnId.length);
 	var qn = await quiz.findOne({ qid : qnId[rndm].qid });
-	console.log(attempted.length + " " + qnId.length);
 	if(attempted.length == qnId.length){
 		res.status(500).send({
 			msg: "all qns attempted"
 		})
 	}
-	else
+	else {
 		while(attempted.includes(qn.qid) == true){
 			rndm = Math.floor(Math.random() * qnId.length);
 			qn = await quiz.findOne({ qid : qnId[rndm].qid });
 		}
-	newAttemp.push(qn.qid);
-	await user.updateOne({uid : uid , attempted : newAttemp});
-	res.status(200).send(qn);
+		newAttemp.push(qn.qid);
+		await user.updateOne({uid : uid , attempted : newAttemp});
+		res.status(200).send(qn);
+	}
 	//if randomly selected qnId is attempted by user run random function again
 }
 
