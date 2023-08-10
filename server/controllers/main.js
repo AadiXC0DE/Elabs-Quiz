@@ -34,24 +34,33 @@ const crtUser = async (req, res) => {
 }
 
 const getUser = async (req, res) => {
-	const user = user.findOne(req.body);
-	res.status(200).send(user);
+	const usr = await user.findOne(req.body);
+	console.log(usr)
+	res.status(200).send((usr));
 }
 
 const getQna = async(req, res) => {
-	const {attempted} = user.findOne(req.body);
-	const qnId = quiz.findOne({});
-	console.log(qnId.length())
-	
-	const giveQ = () => {
-		var rndm = Math.random()*qnId.length();
-		while(attemted.find(qnId[rndm].qid)) {
-			rndm = Math.random()*qnId.length();
+	var {uid , attempted} = await user.findOne(req.body);
+	var newAttemp = attempted;
+	const qnId = await quiz.find({});
+	var rndm = Math.floor(Math.random() * qnId.length);
+	var qn = await quiz.findOne({ qid : qnId[rndm].qid });
+	console.log(attempted.length + " " + qnId.length);
+	if(attempted.length == qnId.length){
+		res.status(500).send({
+			msg: "all qns attempted"
+		})
+	}
+	else
+		while(attempted.includes(qn.qid) == true){
+			rndm = Math.floor(Math.random() * qnId.length);
+			qn = await quiz.findOne({ qid : qnId[rndm].qid });
 		}
-		return qnId;
-	}//if randomly selected qnId is attempted by user run random function again
-	res.status(200).send(qnId);
+	newAttemp.push(qn.qid);
+	await user.updateOne({uid : uid , attempted : newAttemp});
+	res.status(200).send(qn);
+	//if randomly selected qnId is attempted by user run random function again
 }
 
 
-module.exports = {signup, login , crtQna};
+module.exports = {signup, login , crtQna , getQna , crtUser , getUser};

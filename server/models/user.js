@@ -15,8 +15,8 @@ const userSchema = {
 	attempted : {
 		type : [String] 
 	},
-	quizNumber : {
-		type : Number
+	quizAttempted : {
+		type : [String] 
 	}
 
 }
