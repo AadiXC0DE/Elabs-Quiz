@@ -1,5 +1,6 @@
 const express = require('express');
 const {quiz , user} = require('../models/user');
+var randomstring = require('randomstring');
 
 const signup = async (req, res) => {
 	res.send({
@@ -12,14 +13,24 @@ const login = async (req, res) => {
 
 const crtQna = async(req, res) => {
 	try {
-		quiz.create(req.body);
+		const qn = req.body;
+		qn['qid'] = randomstring.generate(4);
+		quiz.create(qn);
+		//add a validation method that ensures unique qid
+		console.log(qn);
 	} 
 	catch (err) {
 		console.log("err occur" + err);
 		res.status(501);
 	}
-	console.log(req.body);
 	res.status(200).send();
+}
+
+const crtUser = async (req, res) => {
+	user.create(req.body);
+	res.status(200).send({
+		msg : "user created"
+	});
 }
 
 const getUser = async (req, res) => {
