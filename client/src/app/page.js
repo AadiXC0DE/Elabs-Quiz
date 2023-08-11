@@ -30,7 +30,7 @@ export default function HomePage() {
         <p className="text-2xl text-gray-900 mb-5 text-center">
           Are you ready?
         </p>
-        <Link legacyBehavior href="/quiz">
+        <Link legacyBehavior href="/login">
           <a className="block w-full bg-yellow-500 hover:bg-yellow-600 transition-colors duration-300 rounded-md py-3 text-center text-white font-bold">
             Start Quiz
           </a>

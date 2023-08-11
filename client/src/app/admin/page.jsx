@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function Admin() {
@@ -9,18 +10,19 @@ export default function Admin() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Replace the URL with the URL of your Express server
-    const res = await fetch("http://localhost:3000/api/v1/quiz/admin/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, password }),
-    });
-    if (res.ok) {
-      router.push("/admin/addQuestion");
-    } else {
-      // Handle error
+    try {
+      const res = await axios.post("http://localhost:5000/api/v1/quiz/login", {
+        uid: id,
+        pwd: password,
+      });
+
+      if (res.status === 200) {
+        router.push("/admin/addQuestion");
+        alert("Authentication successful, redirecting...");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Authentication failed");
     }
   };
 
@@ -30,7 +32,7 @@ export default function Admin() {
       <form onSubmit={handleSubmit}>
         <label htmlFor="id">ID:</label>
         <input
-          type="text"
+          type="number"
           id="id"
           value={id}
           onChange={(event) => setId(event.target.value)}
