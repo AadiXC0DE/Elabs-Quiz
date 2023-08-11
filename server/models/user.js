@@ -5,6 +5,10 @@ const userSchema = {
 	name : {
 		type : String
 	},
+	pwd : {
+		type : String,
+		required : [true , "give a password"]
+	},
 	uid : {
 		type : Number
 	},

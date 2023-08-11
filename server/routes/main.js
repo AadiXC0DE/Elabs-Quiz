@@ -6,8 +6,8 @@ const {signup, login , crtQna , getQna, crtUser , getUser} = require('../control
 
 Router.route('/signup').post(signup);
 Router.route('/login').post(login);
-Router.route('/crtQna').post(crtQna);
-Router.route('/getQna').post(getQna);
+Router.route('/crtQna/:id').post(crtQna);
+Router.route('/getQna/:id').post(getQna);
 Router.route('/crtUser').post(crtUser);
 Router.route('/getUser').post(getUser);
 
