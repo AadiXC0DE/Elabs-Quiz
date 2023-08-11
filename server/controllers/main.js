@@ -9,6 +9,15 @@ const signup = async (req, res) => {
 }
 
 const login = async (req, res) => {
+	try {
+		let usrdata = await user.findOne({name : req.body.name , pwd : req.body.pwd})
+		res.status(200).send({ uid : usrdata.uid , msg : "logged in" }); 
+	} catch (err) {
+		res.status(201).send({
+			code : "err",
+			msg : "user not found or password incorrect"
+		});
+	}
 }
 
 const crtQna = async(req, res) => {
@@ -25,7 +34,6 @@ const crtQna = async(req, res) => {
 	}
 	res.status(200).send();
 }
-
 const crtUser = async (req, res) => {
 	user.create(req.body);
 	res.status(200).send({
@@ -40,13 +48,16 @@ const getUser = async (req, res) => {
 }
 
 const getQna = async(req, res) => {
-	var {uid , attempted} = await user.findOne(req.body);
+	console.log(req.body.uid);
+	var {uid , attempted} = await user.findOne({uid : parseInt(req.body.uid)});
 	var newAttemp = attempted;
 	const qnId = await quiz.find({});
 	var rndm = Math.floor(Math.random() * qnId.length);
 	var qn = await quiz.findOne({ qid : qnId[rndm].qid });
 	if(attempted.length == qnId.length){
-		res.status(500).send({
+		console.log(req.params);
+		res.status(201).send({
+			code: "complete",
 			msg: "all qns attempted"
 		})
 	}
