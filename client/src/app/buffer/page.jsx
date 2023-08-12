@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Selection = () => {
-  const [selectedValue, setSelectedValue] = useState("xyz"); // Default selected value
+  const [selectedValue, setSelectedValue] = useState(""); // Default selected value
   const router = useRouter();
 
   const handleSelectChange = (event) => {
