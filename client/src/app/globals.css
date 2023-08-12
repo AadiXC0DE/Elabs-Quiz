@@ -25,3 +25,9 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+@layer base {
+  html {
+    font-family: ui-monospace, system-ui, sans-serif;
+  }
+}

@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-
+import background from "../../../public/background.png";
 const LoginPage = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [id, setId] = useState("");
@@ -45,15 +45,23 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{
+        backgroundImage: `url(${background.src})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <motion.div initial="hidden" animate="visible" variants={variants}>
-        <div className="bg-white rounded-lg p-10 shadow-lg max-w-xl">
+        <div className="bg-white rounded-xl p-10 shadow-lg max-w-xl">
           <div className="flex flex-col items-center justify-center mb-5">
             <div className="flex items-center mb-2">
-              <h1 className="text-6xl font-bold text-gray-900 mr-2">
-                <span className="text-yellow-500">E</span>labs
+              <h1 className="text-6xl font-bold text-yellow-500 mr-2 ">
+                ELABS
               </h1>
-              <h2 className="text-6xl font-semibold text-gray-900">Quiz</h2>
+              <h2 className="text-6xl font-semibold text-gray-900">QUIZ</h2>
             </div>
           </div>
           <p className="text-2xl text-gray-900 mb-5 text-center">
@@ -63,7 +71,7 @@ const LoginPage = () => {
             <div className="mb-5">
               <input
                 type="number"
-                className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500"
+                className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500 text-black"
                 placeholder={isSignUp ? "ID" : "ID or Name"}
                 value={id}
                 onChange={(event) => setId(event.target.value)}
@@ -73,7 +81,7 @@ const LoginPage = () => {
               <div className="mb-5">
                 <input
                   type="text"
-                  className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500"
+                  className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500 text-black"
                   placeholder="Name"
                   value={name}
                   onChange={(event) => setName(event.target.value)}
@@ -83,7 +91,7 @@ const LoginPage = () => {
             <div className="mb-5">
               <input
                 type="password"
-                className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500"
+                className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500 text-black"
                 placeholder="Password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
@@ -91,14 +99,14 @@ const LoginPage = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-yellow-500 hover:bg-yellow-600 transition-colors duration-300 rounded-md py-3 text-center text-white font-bold mb-2"
+              className="w-full bg-yellow-500 hover:bg-yellow-600 transition-colors duration-300 rounded-xl py-3 text-center text-white font-bold mb-2"
             >
               {isSignUp ? "Sign Up" : "Login"}
             </button>
             <button
               type="button"
               onClick={toggleSignUp}
-              className="w-full bg-gray-300 hover:bg-gray-400 transition-colors duration-300 rounded-md py-3 text-center text-gray-800 font-bold"
+              className="w-full bg-gray-300 hover:bg-gray-400 transition-colors duration-300 rounded-xl py-3 text-center text-gray-800 font-bold"
             >
               {isSignUp ? "Login Instead" : "Sign Up Instead"}
             </button>
