@@ -19,8 +19,8 @@ const QuizComp = () => {
 
   const fetchQuestionData = async () => {
     try {
-      const endpoint =
-        "https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/getQna/xyz";
+      const selct = localStorage.getItem("selectedValue");
+      const endpoint = `https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/getQna/${selct}`;
       const uid = localStorage.getItem("uid");
 
       const res = await axios.post(endpoint, {
@@ -48,8 +48,8 @@ const QuizComp = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const endpoint =
-        "https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/eval/xyz";
+      const selct = localStorage.getItem("selectedValue");
+      const endpoint = `https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/eval/${selct}`;
       const uid = localStorage.getItem("uid");
       console.log(answer);
 

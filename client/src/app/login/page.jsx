@@ -25,7 +25,7 @@ const LoginPage = () => {
 
       if (res.status === 200) {
         localStorage.setItem("uid", res.data.uid);
-        router.push("/quiz");
+        router.push("/buffer");
       }
     } catch (error) {
       console.error("API Error:", error);
