@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const connectionString = 'mongodb://localhost:27017/quiz';
+const connectionString = `mongodb+srv://amoghpreneur:${process.env.ATLAS_PASS}@cluster1.vx1tnwk.mongodb.net/quiz`;
 
 async function connect () {
 	await mongoose

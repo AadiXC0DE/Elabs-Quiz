@@ -55,10 +55,12 @@ const eval = async(req, res) => {
 		console.log(usr.score);
 		res.status(200).send({
 			code : "complete",
-			msg : "evaluation complete"
+			msg : "evaluation complete",
+			crct : qn.correctOption
 		});
 	}
 	catch(err) {
+		console.log(err);
 		res.status(501).send({code : 501 , msg : "err occured"});
 	}
 	
@@ -80,7 +82,7 @@ const getUser = async (req, res) => {
 
 const getQna = async(req, res) => {
 	console.log(req.body.uid);
-	var {uid , attempted} = await user.findOne({uid : parseInt(req.body.uid)});
+	var {uid , attempted , score} = await user.findOne({uid : req.body.uid});
 	
 
 	var newAttemp = attempted;
@@ -100,10 +102,14 @@ const getQna = async(req, res) => {
 	console.log(stAttempted);
 	console.log(stAttempted.length + " " + attempted.length + " " + listqns.length + " " + req.params.id); 
 	if(stAttempted.length >= listqns.length){
-		console.log(req.params);
+		console.log(score);
 		res.status(201).send({
 			code: "complete",
-			msg: "all qns attempted"
+			msg: "all qns attempted",
+			final : {
+				crct : score,
+				ttl : listqns.length
+			}
 		})
 	}
 	else {
