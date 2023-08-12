@@ -32,7 +32,7 @@ const Selection = () => {
           >
             <option value="ml1">ml1</option>
             <option value="ui1">ui1</option>
-            <option value="ui1">web1</option>
+            <option value="web1">web1</option>
             {/* Add more options as needed */}
           </select>
         </div>
