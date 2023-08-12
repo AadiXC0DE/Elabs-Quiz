@@ -1,130 +1,144 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import background from "../../../public/background.png";
-import { motion } from "framer-motion";
-
-const questionForQuiz = [
-  {
-    question: "Which one is the smallest ocean in the World?",
-    options: ["Indian", "Pacific", "Atlantic", "Arctic"],
-    correctOption: "Arctic",
-  },
-  {
-    question: "Which planet is known as the Red Planet?",
-    options: ["Venus", "Mars", "Jupiter", "Saturn"],
-    correctOption: "Mars",
-  },
-  {
-    question: "What is the capital city of France?",
-    options: ["Berlin", "Madrid", "Paris", "Rome"],
-    correctOption: "Paris",
-  },
-  {
-    question: "Which gas do plants primarily use for photosynthesis?",
-    options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
-    correctOption: "Carbon Dioxide",
-  },
-  {
-    question: "What is the largest mammal?",
-    options: ["Elephant", "Giraffe", "Blue Whale", "Hippopotamus"],
-    correctOption: "Blue Whale",
-  },
-  // Add more questions here...
-];
+import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 
 const QuizComp = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [questionData, setQuestionData] = useState("");
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [correctOption, setCorrectOption] = useState("");
+  const [code, setCode] = useState("");
+  const [qid, setQid] = useState("");
+  const [answer, setAnswer] = useState(""); // Store the user's selected answer
+  const [score, setScore] = useState({});
 
-  const currentQuestion = questionForQuiz[currentQuestionIndex];
+  useEffect(() => {
+    fetchQuestionData();
+  }, []);
 
-  const optionSelection = (option) => {
-    setSelectedOption(option);
-  };
+  const fetchQuestionData = async () => {
+    try {
+      const endpoint =
+        "https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/getQna/xyz";
+      const uid = localStorage.getItem("uid");
 
-  const handleNextQuestion = () => {
-    if (selectedOption === currentQuestion.correctOption) {
-      setScore(score + 1);
+      const res = await axios.post(endpoint, {
+        uid: uid,
+      });
+
+      if (res.data.code === "complete") {
+        setCode(res.data.code);
+        console.log(res.data);
+        console.log(res.data.final);
+        setScore(res.data.final);
+      }
+
+      setQuestionData(res.data.question);
+      setSelectedOption(res.data.options);
+      setCorrectOption(res.data.correctOption);
+      setQid(res.data.qid);
+      console.log(qid);
+    } catch (error) {
+      console.error("API Error:", error);
+      alert("Failed to get questions");
     }
-
-    setSelectedOption("");
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const endpoint =
+        "https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/eval/xyz";
+      const uid = localStorage.getItem("uid");
+      console.log(answer);
+
+      const res = await axios.post(endpoint, {
+        uid: uid,
+        qid: qid,
+        ans: answer,
+      });
+      console.log(res.data);
+      fetchQuestionData();
+    } catch (error) {
+      console.log("API Error:", error);
+    }
+  };
+
   //framer
-  const pageVariants = {
-    initial: { opacity: 0, y: 50 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  const variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <motion.div initial="initial" animate="animate" variants={pageVariants}>
-        <div
-          className="max-w-lg mx-auto p-8 rounded-lg shadow-md bg-white"
-          style={{ height: "600px", width: "600px" }}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={qid} // Ensure a unique key for each question
+          initial="hidden"
+          animate="visible"
+          variants={variants}
+          className="max-w-3xl max-h-2xl h-full w-full p-6 rounded-lg shadow-lg bg-white "
+          exit={{ opacity: 0, y: -50, transition: { duration: 0.3 } }}
         >
-          <div className="text-center pb-6">
-            <h1 className="text-2xl md:text-4xl font-semibold text-black">
-              Quiz
-            </h1>
-            <p className="text-lg md:text-xl text-black pt-2">
-              Choose the correct option!
-            </p>
-          </div>
-          <div>
-            {currentQuestionIndex < questionForQuiz.length ? (
-              <div>
-                <div className="mb-6 p-4 bg-yellow-300 rounded-lg">
-                  <h1 className="text-xl md:text-2xl">
-                    {currentQuestion.question}
-                  </h1>
-                </div>
-                <div className="grid grid-cols-1 gap-4">
-                  {currentQuestion.options.map((option, index) => (
-                    <label
-                      key={index}
-                      className={`block cursor-pointer transition duration-300 ${
-                        selectedOption === option
-                          ? "bg-yellow-300"
-                          : "bg-gray-200"
-                      } p-4 rounded-lg`}
-                      onClick={() => optionSelection(option)}
-                    >
-                      <input
-                        type="radio"
-                        name="answer"
-                        value={option}
-                        className="mr-2"
-                        checked={selectedOption === option}
-                        readOnly
-                      />
-                      {option}
-                    </label>
-                  ))}
-                </div>
-                <div className="text-center mt-6">
-                  <button
-                    className={`px-6 py-2 rounded-md ${
-                      selectedOption
-                        ? "bg-yellow-400 hover:bg-yellow-500"
-                        : "bg-gray-400 cursor-not-allowed"
-                    } text-white font-semibold transition duration-300`}
-                    onClick={handleNextQuestion}
-                    disabled={!selectedOption}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="text-2xl text-center">
-                Your total score is {score} out of {questionForQuiz.length}
-              </div>
-            )}
-          </div>
-        </div>
-      </motion.div>
+          {code !== "complete" && (
+            <motion.p
+              className="text-2xl text-gray-800 mb-4"
+              variants={variants}
+            >
+              Q.{questionData}
+            </motion.p>
+          )}
+          {selectedOption &&
+            selectedOption.map((option, index) => (
+              <motion.label
+                key={index}
+                className="block mb-2"
+                variants={variants}
+              >
+                <input
+                  type="radio"
+                  name="answer"
+                  value={option}
+                  onChange={(event) => setAnswer(event.target.value)}
+                  className="mr-2 leading-tight"
+                />
+                <span className="text-gray-700">{option}</span>
+              </motion.label>
+            ))}
+          {code !== "complete" && (
+            <motion.button
+              type="submit"
+              className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
+              variants={variants}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleSubmit}
+            >
+              Submit
+            </motion.button>
+          )}
+          {code === "complete" && (
+            <motion.div
+              className="text-center flex flex-col items-center justify-center"
+              initial="hidden"
+              animate="visible"
+              variants={variants}
+            >
+              <motion.p className="text-green-500 font-bold text-3xl mt-2">
+                Quiz Completed
+              </motion.p>
+              <motion.p className="text-black text-xl mt-2">
+                Your Final Score is{" "}
+                <span className="font-bold text-green-600 px-1">
+                  {score.crct}/{score.ttl}
+                </span>
+              </motion.p>
+            </motion.div>
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

@@ -24,6 +24,7 @@ const LoginPage = () => {
       console.log(res.data);
 
       if (res.status === 200) {
+        localStorage.setItem("uid", res.data.uid);
         router.push("/quiz");
       }
     } catch (error) {
@@ -93,8 +94,9 @@ const LoginPage = () => {
               <input
                 type="text"
                 className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500 text-black"
-                placeholder={"Name"}
+                placeholder={"Roll No"}
                 value={name}
+                maxLength={9}
                 onChange={(event) => setName(event.target.value)}
               />
             </div>
@@ -105,6 +107,7 @@ const LoginPage = () => {
                 className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500 text-black"
                 placeholder="Password"
                 value={password}
+                maxLength={8}
                 onChange={(event) => setPassword(event.target.value)}
               />
             </div>
