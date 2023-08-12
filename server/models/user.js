@@ -10,11 +10,11 @@ const userSchema = {
 		required : [true , "give a password"]
 	},
 	uid : {
-		type : Number
+		type : String 
 	},
 	score : {
 		type : Number,
-		value : 0
+		default : 0
 	},
 	attempted : {
 		type : [String] 
