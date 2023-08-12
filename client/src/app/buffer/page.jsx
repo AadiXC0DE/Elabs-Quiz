@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Selection = () => {
-  const [selectedValue, setSelectedValue] = useState(""); // Default selected value
+  const [selectedValue, setSelectedValue] = useState("ml1"); // Default selected value
   const router = useRouter();
 
   const handleSelectChange = (event) => {
@@ -32,6 +32,7 @@ const Selection = () => {
           >
             <option value="ml1">ml1</option>
             <option value="ui1">ui1</option>
+            <option value="ui1">web1</option>
             {/* Add more options as needed */}
           </select>
         </div>
