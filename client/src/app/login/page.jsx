@@ -45,15 +45,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center"
-      style={{
-        backgroundImage: `url(${background.src})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
+    <div className="min-h-screen flex items-center justify-center">
       <motion.div initial="hidden" animate="visible" variants={variants}>
         <div className="bg-white rounded-xl p-10 shadow-lg max-w-xl">
           <div className="flex flex-col items-center justify-center mb-5">

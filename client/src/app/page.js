@@ -12,15 +12,7 @@ const variants = {
 
 export default function HomePage() {
   return (
-    <div
-      className="min-h-screen flex items-center justify-center"
-      style={{
-        backgroundImage: `url(${background.src})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
+    <div className="min-h-screen flex items-center justify-center">
       <motion.div
         initial="hidden"
         animate="visible"
