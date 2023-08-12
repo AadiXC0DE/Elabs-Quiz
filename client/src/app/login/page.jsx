@@ -4,37 +4,66 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import background from "../../../public/background.png";
+
+//login function
 const LoginPage = () => {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleLogin = async () => {
     try {
-      let endpoint = isSignUp ? "/api/v1/quiz/signup" : "/api/v1/quiz/login";
+      const endpoint =
+        "https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/login";
 
       const res = await axios.post(endpoint, {
-        uid: id,
+        name: name,
+        pwd: password,
+      });
+      console.log(res.data);
+
+      if (res.status === 200) {
+        router.push("/quiz");
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+      alert("Login failed");
+    }
+  };
+
+  const handleSignUp = async () => {
+    try {
+      const endpoint =
+        "https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/crtUser";
+
+      const res = await axios.post(endpoint, {
         pwd: password,
         name: name,
       });
 
       if (res.status === 200) {
-        router.push("/admin/addQuestion");
-        alert("Authentication successful, redirecting...");
+        router.push("/login");
+        alert("signUp successful, you can log in now");
       }
     } catch (error) {
-      console.error(error);
-      alert("Authentication failed");
+      console.error("API Error:", error);
+      alert("Sign Up failed");
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (isSignUp) {
+      handleSignUp();
+    } else {
+      handleLogin();
     }
   };
 
   const toggleSignUp = () => {
     setIsSignUp(!isSignUp);
-    setId("");
     setName("");
     setPassword("");
   };
@@ -62,24 +91,14 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
               <input
-                type="number"
+                type="text"
                 className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500 text-black"
-                placeholder={isSignUp ? "ID" : "ID or Name"}
-                value={id}
-                onChange={(event) => setId(event.target.value)}
+                placeholder={"Name"}
+                value={name}
+                onChange={(event) => setName(event.target.value)}
               />
             </div>
-            {isSignUp && (
-              <div className="mb-5">
-                <input
-                  type="text"
-                  className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500 text-black"
-                  placeholder="Name"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                />
-              </div>
-            )}
+
             <div className="mb-5">
               <input
                 type="password"
