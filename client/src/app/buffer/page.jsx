@@ -1,10 +1,24 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const Selection = () => {
   const [selectedValue, setSelectedValue] = useState("ml1"); // Default selected value
+  const [options, setOptions] = useState([]);
   const router = useRouter();
+
+  useEffect(() => {
+    // Replace 'your-api-endpoint' with your actual API endpoint
+    axios
+      .get("https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/getTopics")
+      .then((response) => {
+        setOptions(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching options:", error);
+      });
+  }, []);
 
   const handleSelectChange = (event) => {
     setSelectedValue(event.target.value);
@@ -30,10 +44,11 @@ const Selection = () => {
             onChange={handleSelectChange}
             className="w-full py-2 px-4 rounded-md border focus:outline-none focus:border-yellow-500 text-black"
           >
-            <option value="ml1">ml1</option>
-            <option value="ui1">ui1</option>
-            <option value="web1">web1</option>
-            {/* Add more options as needed */}
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
           </select>
         </div>
         <button
