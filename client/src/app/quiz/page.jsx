@@ -24,11 +24,12 @@ const QuizComp = () => {
       const endpoint = `https://elabs-quiz-api.el.r.appspot.com/api/v1/quiz/getQna/${selct}`;
       const uid = localStorage.getItem("uid");
 
-      setIsButtonDisabled(false); // Enable the button when a new question is fetched
+      // Enable the button when a new question is fetched
 
       const res = await axios.post(endpoint, {
         uid: uid,
       });
+      setIsButtonDisabled(false);
 
       if (res.data.code === "complete") {
         setCode(res.data.code);
